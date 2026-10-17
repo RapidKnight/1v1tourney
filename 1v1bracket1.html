@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NA vs EU bracket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#F3F5F8;--card:#FFFFFF;--ink:#1A2233;--muted:#6B7385;--faint:#A3A9B6;
+  --line:#DDE1E8;--line-strong:#B9C0CC;--hover:#EEF1F6;--win:#E3F2EC;
+  --na:#0F8A6A;--eu:#5B4FD6;--none:#8A90A0;--gold:#B7862A;--seg:#E4E8EF;--seg-on:#FFFFFF;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#141821;--card:#1D2230;--ink:#E6E9F0;--muted:#9AA2B3;--faint:#646B7D;
+    --line:#2C3343;--line-strong:#434B5E;--hover:#252B3A;--win:#183A2F;
+    --na:#2FBF95;--eu:#8D84F0;--none:#8A90A0;--gold:#E2B550;--seg:#252B3A;--seg-on:#343C50;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#141821;--card:#1D2230;--ink:#E6E9F0;--muted:#9AA2B3;--faint:#646B7D;
+  --line:#2C3343;--line-strong:#434B5E;--hover:#252B3A;--win:#183A2F;
+  --na:#2FBF95;--eu:#8D84F0;--none:#8A90A0;--gold:#E2B550;--seg:#252B3A;--seg-on:#343C50;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
+main{padding:28px 32px 48px}
+h1,h2{font-family:"Chakra Petch","IBM Plex Sans",system-ui,sans-serif;font-weight:600;margin:0}
+h1{font-size:30px;letter-spacing:.01em}
+h2{font-size:19px;margin:36px 0 12px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px}
+.champ{min-width:220px}
+.champ .k{font-size:13px;color:var(--muted)}
+.champ .v{font-family:"Chakra Petch","IBM Plex Sans",sans-serif;font-size:24px;font-weight:600;color:var(--gold)}
+.champ .u{font-size:13px;color:var(--muted)}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:20px}
+.controls .lbl{font-size:14px;color:var(--muted)}
+.seg{display:inline-flex;background:var(--seg);border-radius:8px;padding:3px}
+.seg button{font:inherit;font-size:14px;border:0;background:transparent;color:var(--muted);padding:6px 14px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--ink);font-weight:500}
+.btn{font:inherit;font-size:14px;background:transparent;color:var(--ink);border:1px solid var(--line-strong);border-radius:8px;padding:6px 14px;cursor:pointer}
+.btn:hover{background:var(--hover)}
+button:focus-visible,.row:focus-visible{outline:2px solid var(--eu);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--muted);margin-top:16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.scroll{overflow-x:auto;padding-bottom:8px}
+.stage{position:relative}
+.colh{position:absolute;top:0;font-size:13px;color:var(--muted)}
+.box{position:absolute;background:var(--card);border:1px solid var(--line-strong);border-radius:6px;overflow:hidden}
+.box.gf{border-color:var(--gold);border-width:2px}
+.row{height:38px;display:flex;align-items:center;gap:8px;padding:0 10px}
+.row+.row{border-top:1px solid var(--line)}
+.row.live{cursor:pointer}
+.row.live:hover{background:var(--hover)}
+.row.won{background:var(--win)}
+.row.won .nk{font-weight:600}
+.row.lost .nk,.row.lost .un{color:var(--faint)}
+.t{min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nk{font-size:14px}
+.un{font-size:12px;color:var(--muted)}
+.ph{font-size:13px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+svg path{fill:none;stroke:var(--line-strong);stroke-width:1.5}
+.note{font-size:13px;color:var(--muted);margin:0 0 12px}
+@media (max-width:640px){main{padding:20px 16px 40px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1>NA vs EU bracket</h1>
+    <div class="champ" aria-live="polite">
+      <div class="k">Champion</div>
+      <div class="v" id="champ">To be decided</div>
+      <div class="u" id="champu"></div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn" id="reset">Reset results</button>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--na)"></span>NA</span>
+    <span><span class="dot" style="background:var(--eu)"></span>EU</span>
+    <span><span class="dot" style="background:var(--none)"></span>No region</span>
+    <span>Click a player to send them through. Click again to undo.</span>
+  </div>
+
+  <h2>Winners bracket</h2>
+  <div class="scroll"><div class="stage" id="wb"></div></div>
+
+  <section id="lbwrap">
+    <h2>Losers bracket</h2>
+    <p class="note" id="lbnote"></p>
+    <div class="scroll"><div class="stage" id="lb"></div></div>
+  </section>
+</main>
+<script>
+const DN={"op1simpletonp":"--OP1::Simpleton:P","operationonemingo":"aceisthebeststyle2","yel_eight":"alexi1ki","jewlocked":"Apollo_Aimer","potatoes_0967.":"Astronyth","cheeesees9":"cheeesees9","clashspec":"ClashSpec","sinxer12":"darkroot","fakenimk":"Exclusiveins","newfoxy3.0":"famuly36","divanshinff_72204":"heatwaves2578","hkasdkfjnasdkfjhasdjiu2yiusahdfi":"hi","jens_the_avenger":"Jimmyymmijjimmy1","supremegentalmen":"Light_yagami1251","mocktab":"Mocktab","rebzyyxforlife0":"NaonyaZenin","noob352.":"NOOB352","manilovefrogs23":"noobmaster","peanutandsushicat":"Peanut9003w","the_king121__55595":"Sealman","furry640470":"Slash83747","themassivegilgeousauruslarper":"SzoboszlaiIsGod","midtier2":"theaimprokhariz2135","xavv8thecake":"xavv","bulldog09554":"XxRyder_YeEtBoIxX","end_real.":"メFlameメ"};
+const NA=["jewlocked","newfoxy3.0","supremegentalmen","mocktab","rebzyyxforlife0","peanutandsushicat","furry640470","midtier2"];
+const EU=["yel_eight","cheeesees9","clashspec","fakenimk","divanshinff_72204","jens_the_avenger","themassivegilgeousauruslarper","end_real."];
+const R1=[["newfoxy3.0","BYE"],["jewlocked","op1simpletonp"],["mocktab","potatoes_0967."],["supremegentalmen","BYE"],["rebzyyxforlife0","sinxer12"],["peanutandsushicat","hkasdkfjnasdkfjhasdjiu2yiusahdfi"],["operationonemingo","BYE"],["furry640470","midtier2"],["cheeesees9","BYE"],["yel_eight","noob352."],["clashspec","the_king121__55595"],["jens_the_avenger","BYE"],["fakenimk","xavv8thecake"],["divanshinff_72204","bulldog09554"],["end_real.","BYE"],["themassivegilgeousauruslarper","manilovefrogs23"]];
+const KEY="na-eu-bracket-v1";
+let res={},mode="qf",M={};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s){res=s.res||{}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({res,mode}))}catch(e){}}
+
+const S=n=>({t:"s",n}),W=id=>({t:"w",id}),L=id=>({t:"l",id});
+function build(){
+  M={};
+  R1.forEach((p,i)=>M["w1_"+i]={s:[S(p[0]),S(p[1])]});
+  const cnt=[16,8,4,2,1];
+  for(let r=2;r<=5;r++)for(let i=0;i<cnt[r-1];i++)M[`w${r}_${i}`]={s:[W(`w${r-1}_${2*i}`),W(`w${r-1}_${2*i+1}`)]};
+  for(let i=0;i<4;i++)M["w3_"+i].label="quarterfinal "+(i+1);
+  M.w4_0.label="NA semifinal";M.w4_1.label="EU semifinal";
+  M.w5_0.label=mode==="off"?"final":"winners final";
+  if(mode==="qf"){
+    M.l1_0={s:[L("w3_0"),L("w3_1")]};
+    M.l1_1={s:[L("w3_2"),L("w3_3")]};
+    M.l2_0={s:[W("l1_0"),L("w4_1")]};
+    M.l2_1={s:[W("l1_1"),L("w4_0")]};
+    M.l3_0={s:[W("l2_0"),W("l2_1")],label:"losers semifinal"};
+  }
+  if(mode==="sf")M.l3_0={s:[L("w4_0"),L("w4_1")],label:"losers semifinal"};
+  if(mode!=="off"){
+    M.lf={s:[W("l3_0"),L("w5_0")],label:"losers final"};
+    M.gf={s:[W("w5_0"),W("lf")],label:"grand final"};
+    M.gf2={s:[W("w5_0"),W("lf")],label:"bracket reset"};
+  }
+}
+function src(x){return x.t==="s"?x.n:x.t==="w"?win(x.id):lose(x.id)}
+function needReset(){const g=win("gf");return !!g&&g===win("lf")}
+function parts(id){if(id==="gf2"&&!needReset())return [null,null];return M[id].s.map(src)}
+function win(id){const p=parts(id);if(p[0]==="BYE"&&p[1])return p[1];if(p[1]==="BYE"&&p[0])return p[0];if(!p[0]||!p[1])return null;return p.includes(res[id])?res[id]:null}
+function lose(id){const w=win(id);if(!w)return null;const p=parts(id);if(p.includes("BYE"))return null;return p[0]===w?p[1]:p[0]}
+function ph(x){
+  if(x.t==="l")return "Loser of "+M[x.id].label;
+  if(x.t==="w"&&M[x.id].label&&x.id[0]==="l")return "Winner of "+M[x.id].label;
+  return "TBD";
+}
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const color=n=>NA.includes(n)?"var(--na)":EU.includes(n)?"var(--eu)":"var(--none)";
+
+const CW=210,GX=40,BH=79,T=34;
+function boxHTML(id,x,y,cls){
+  const p=parts(id),w=win(id),live=p[0]&&p[1]&&!p.includes("BYE");
+  let h=`<div class="box ${cls||""}" style="left:${x}px;top:${y-BH/2}px;width:${CW}px">`;
+  p.forEach((n,s)=>{
+    const real=n&&n!=="BYE",won=w&&n===w,lost=w&&real&&n!==w;
+    const c=["row",live?"live":"",won?"won":"",lost?"lost":""].join(" ");
+    const attrs=live?` role="button" tabindex="0" data-id="${id}" data-s="${s}" aria-label="${esc((DN[n]||n)+" wins")}"`:"";
+    const inner=real
+      ?`<span class="dot" style="background:${color(n)}"></span><div class="t"><span class="nk">${esc(DN[n]||n)}</span><span class="un">${esc(n)}</span></div>`
+      :`<span class="ph">${n==="BYE"?"Bye":id==="gf2"?(win("gf")?"Not needed":"If losers side wins"):esc(ph(M[id].s[s]))}</span>`;
+    h+=`<div class="${c}"${attrs} title="${real?esc((DN[n]||n)+" ("+n+")"):""}">${inner}</div>`;
+  });
+  return h+"</div>";
+}
+function drawStage(el,cols,edges,height,extraCls){
+  const pos={};let h="";
+  cols.forEach((c,ci)=>{const x=ci*(CW+GX);h+=`<div class="colh" style="left:${x}px">${c.h}</div>`;c.ids.forEach((id,k)=>pos[id]={x,y:c.ys[k]})});
+  const W=cols.length*CW+(cols.length-1)*GX;
+  let svg=`<svg width="${W}" height="${height}" style="position:absolute;left:0;top:0;pointer-events:none" aria-hidden="true">`;
+  edges.forEach(([a,b])=>{const x1=pos[a].x+CW,y1=pos[a].y,x2=pos[b].x,y2=pos[b].y,m=(x1+x2)/2;svg+=`<path d="M${x1} ${y1}H${m}V${y2}H${x2}"/>`});
+  svg+="</svg>";
+  cols.forEach(c=>c.ids.forEach((id,k)=>h+=boxHTML(id,pos[id].x,pos[id].y,(extraCls||{})[id])));
+  el.style.width=W+"px";el.style.height=height+"px";
+  el.innerHTML=svg+h;
+}
+function render(){
+  build();
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
+  const P=92,G=40,cy=[];
+  cy[0]=R1.map((_,i)=>T+i*P+P/2+(i>=8?G:0));
+  const cnt=[16,8,4,2,1];
+  for(let r=1;r<5;r++)cy[r]=Array.from({length:cnt[r]},(_,i)=>(cy[r-1][2*i]+cy[r-1][2*i+1])/2);
+  const heads=["Round 1","Round 2","Quarterfinals","Semifinals",mode==="off"?"Final":"Winners final"];
+  const cols=heads.map((h,r)=>({h,ids:Array.from({length:cnt[r]},(_,i)=>`w${r+1}_${i}`),ys:cy[r]}));
+  const edges=[];
+  for(let r=2;r<=5;r++)for(let i=0;i<cnt[r-1];i++){edges.push([`w${r-1}_${2*i}`,`w${r}_${i}`],[`w${r-1}_${2*i+1}`,`w${r}_${i}`])}
+  if(mode!=="off"){cols.push({h:"Grand final",ids:["gf"],ys:[cy[4][0]]},{h:"Bracket reset",ids:["gf2"],ys:[cy[4][0]]});edges.push(["w5_0","gf"],["gf","gf2"])}
+  drawStage(document.getElementById("wb"),cols,edges,T+16*P+G,{gf:"gf",gf2:"gf",w5_0:mode==="off"?"gf":""});
+
+  const wrap=document.getElementById("lbwrap");
+  if(mode==="off"){wrap.hidden=true}
+  else{
+    wrap.hidden=false;
+    const y0=T+BH/2+8,y1=y0+120,ym=(y0+y1)/2;
+    let lc,le,lh;
+    if(mode==="qf"){
+      lc=[{h:"Losers round 1",ids:["l1_0","l1_1"],ys:[y0,y1]},{h:"Losers round 2",ids:["l2_0","l2_1"],ys:[y0,y1]},{h:"Losers semifinal",ids:["l3_0"],ys:[ym]},{h:"Losers final",ids:["lf"],ys:[ym]}];
+      le=[["l1_0","l2_0"],["l1_1","l2_1"],["l2_0","l3_0"],["l2_1","l3_0"],["l3_0","lf"]];
+      lh=y1+BH/2+8;
+      document.getElementById("lbnote").textContent="Quarterfinal losers drop here. Semifinal losers come in at losers round 2, crossed over so NA and EU players meet, and the winners final loser comes in at the losers final.";
+    }else{
+      lc=[{h:"Losers semifinal",ids:["l3_0"],ys:[y0]},{h:"Losers final",ids:["lf"],ys:[y0]}];
+      le=[["l3_0","lf"]];
+      lh=y0+BH/2+8;
+      document.getElementById("lbnote").textContent="The two semifinal losers play each other, and the winner faces the winners final loser for a spot in the grand final.";
+    }
+    drawStage(document.getElementById("lb"),lc,le,lh);
+  }
+  const c=mode==="off"?win("w5_0"):(win("gf")?(needReset()?win("gf2"):win("gf")):null);
+  document.getElementById("champ").textContent=c?(DN[c]||c):"To be decided";
+  document.getElementById("champu").textContent=c?c:"";
+}
+function pick(el){
+  const id=el.dataset.id,s=+el.dataset.s,p=parts(id);
+  res[id]=res[id]===p[s]?null:p[s];
+  save();render();
+  const again=document.querySelector(`.row[data-id="${id}"][data-s="${s}"]`);if(again)again.focus({preventScroll:true});
+}
+document.addEventListener("click",e=>{const el=e.target.closest(".row.live");if(el)pick(el)});
+document.addEventListener("keydown",e=>{const el=e.target.closest&&e.target.closest(".row.live");if(el&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(el)}});
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;save();render()}));
+let armed=null;const rb=document.getElementById("reset");
+rb.addEventListener("click",()=>{
+  if(!armed){rb.textContent="Click again to reset";armed=setTimeout(()=>{rb.textContent="Reset results";armed=null},3000);return}
+  clearTimeout(armed);armed=null;rb.textContent="Reset results";res={};save();render();
+});
+render();
+</script>
+</body>
+</html>
